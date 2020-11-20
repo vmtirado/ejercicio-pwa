@@ -9,25 +9,36 @@ const Hero=()=>{
             if(localStorage.getItem("heroName")===null){
                 setMessage("You're offline, please try again");
             }else{
-                console.log("Entre al guuardar")
-                const heroe={
+                const heroe=[{
                     name:localStorage.getItem("heroName"),
                     description:localStorage.getItem("heroDescription"),
                     modified:localStorage.getItem("heroModified"),
                     thumbnail:{
-                        path:"../public/image_not_available",
+                        path:"./public/image_not_available",
                         extension:"jpg"
                     }
-                }
-                setHeroes(... heroes,heroe)
+                }]
+                setHeroes(...heroes,heroe);
             }
         }else{
             fetch(URL).then(res=>res.json()).then(res=>{
                 console.log(res.data.results)
+                localStorage.setItem("heroName",res.data.results[1].name)
+                localStorage.setItem("heroDescription",res.data.results[1].description)
+                localStorage.setItem("heroModified",res.data.results[1].modified)
+                const heroe=[{
+                    name:localStorage.getItem("heroName"),
+                    description:localStorage.getItem("heroDescription"),
+                    modified:localStorage.getItem("heroModified"),
+                    thumbnail:{
+                        path:"./public/image_not_available",
+                        extension:"jpg"
+                    }
+                }]
                 setHeroes(...heroes,res.data.results);
-                localStorage.setItem("heroName",res.data.results[0].name)
-                localStorage.setItem("heroDescription",res.data.results[0].description)
-                localStorage.setItem("heroModified",res.data.results[0].modified)
+                // localStorage.setItem("heroName",res.data.results[0].name)
+                // localStorage.setItem("heroDescription",res.data.results[0].description)
+                // localStorage.setItem("heroModified",res.data.results[0].modified)
             })
         }
     },[])
@@ -39,7 +50,8 @@ const Hero=()=>{
             <p>{message}</p>
             <Container>
             {heroes.map((h)=>(
-                <div>         
+                <div> 
+                    <p>{""+h.thumbnail.path+"."+h.thumbnail.extension}</p>        
                 <Row>
                     <Col sm={3}>
                     <Card style={{ width: '18rem' }}>
